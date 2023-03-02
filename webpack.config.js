@@ -17,7 +17,7 @@ const config = {
       ],
     }),
   ],
-  rules: [
+  loaders: [
     {
       test: /\.m?js$/,
       exclude: /node_modules/,
