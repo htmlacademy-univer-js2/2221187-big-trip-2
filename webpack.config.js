@@ -16,8 +16,11 @@ const config = {
         { from: "public", to: "build" },
       ],
     }),
-  ],
-  loaders: [
+  ]
+};
+
+module.exports = config;
+module.rules = [
     {
       test: /\.m?js$/,
       exclude: /node_modules/,
@@ -30,7 +33,4 @@ const config = {
         }
       }
     }
-  ]
-};
-
-module.exports = config;
+];
