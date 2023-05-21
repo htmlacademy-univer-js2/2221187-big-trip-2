@@ -1,36 +1,26 @@
-const webpack = require('webpack');
-const path = require('path');
+const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
-const config = {
-  entry: './main.js',
+module.exports = {
+  entry: "./src/main.js",
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js',
-	clean: true
+    path: path.resolve(__dirname, "build"),
+    filename: "bundle.js",
+    clean: true,
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   plugins: [
     new CopyPlugin({
-      patterns: [
-        { from: "public", to: "build" },
-      ],
+      patterns: [{ from: "public" }],
     }),
-  ]
+  ],
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.js$/,
+  //       exclude: /(node_modules)/,
+  //       use: ["babel-loader"],
+  //     },
+  //   ],
+  // },
 };
-
-module.exports = config;
-module.rules = [
-    {
-      test: /\.m?js$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: [
-            ['@babel/preset-env', { targets: "defaults" }]
-          ]
-        }
-      }
-    }
-];
