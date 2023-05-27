@@ -45,11 +45,34 @@ const TYPES_POINT = [
 
 const COUNT_POINT = 20;
 
+const FILTERS_TYPE = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past'
+}
+
+const FITERS_MESSAGE = {
+  EVERYTHING: 'Click New Event to create your first point',
+  FUTURE: 'There are no future events now',
+  PAST: 'There are no past events now'
+}
+
+const SORTED_TYPE = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
+}
+
 export {
   CITIES,
   TITLES_OFFER,
   DESCRIPTIONS,
   TYPES_POINT,
-  COUNT_POINT
+  COUNT_POINT,
+  FILTERS_TYPE,
+  FITERS_MESSAGE,
+  SORTED_TYPE
 };
 
