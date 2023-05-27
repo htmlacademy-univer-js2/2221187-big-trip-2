@@ -19,20 +19,20 @@ const filterTemplate = () => {
   `;
 };
 
-class FilterView {
-  getTemplate() {
-    return filterTemplate;
+class FiltersView {
+  get _template() {
+    return createFiltersTemplate();
   }
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
 
-    return this.element;
+  get element() {
+    if(!this._element) {
+      this._element = createElement(this._template);
+    }
+    return this._element;
   }
 
   removeElement() {
-    this.element = null;
+    this._element = null;
   }
 }
 

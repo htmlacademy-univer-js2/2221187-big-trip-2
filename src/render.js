@@ -14,7 +14,7 @@ export const createElement = (template) => {
 
 const render = (component, container, place) => {
   console.log(component, container, place);
-  container.insertAdjacentElement(place, component.getElement());
+  container.insertAdjacentElement(place, component.element);
 };
 
 export default render;

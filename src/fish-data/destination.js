@@ -29,6 +29,7 @@ const generateDestination = (id) => ({
   'pictures': Array.from({length: getRandomInteger(1,6)}, generatePhoto)
 });
 
-const Destinations = [generateDestination(1), generateDestination(2)];
+const Destinations = [generateDestination(1), generateDestination(2),
+	generateDestination(3), generateDestination(4)];
 
 export default Destinations;

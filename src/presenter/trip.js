@@ -11,25 +11,75 @@ let dotsCount = 3;
 
 class TripView {
   constructor(container, pointsModel) {
-    this.component = new DotsView();
-    this.container = container;
-    this.pointsModel = pointsModel;
-    this.listPoints = this.pointsModel.getPoints();
+    this._component = new DotsView();
+    this._container = container;
+    this._pointsModel = pointsModel;
+    this._listPoints = this._pointsModel.getPoints();
   }
 
   init() {
-    render(new SortView(), this.container, "beforebegin");
-    render(this.component, this.container, "beforebegin");
-    render(new FormChangeView(), this.component.getElement(), "beforebegin");
+    render(new SortView(), this._container, "beforebegin");
+    render(this._component, this._container, "beforebegin");
+    render(new FormChangeView(), this._component.getElement(), "beforebegin");
 
     for (let i = 0; i < dotsCount; i++) {
-      render(new FormCreateView(), this.component.getElement(), "beforebegin");
+      render(new FormCreateView(), this._component.getElement(), "beforebegin");
     }
 	
-    render(new EditPointView(this.listPoints[0]), this.component.getElement());
-    for (let i = 0; i < this.listPoints.length; i++) {
-      render(new PointView(this.listPoints[i]), this.component.getElement());
+    render(new NewPointView(this._pointsModel.getOffers(),
+      this._pointsModel.getDestination()), this._component.getElement(), "beforebegin");
+	
+	for (let i = 0; i < this._listPoints.length; i++) {
+      const currentPoint = this._listPoints[i];
+      const currentOffers = this._pointsModel.getOffers(currentPoint);
+      const currentDestination = this._pointsModel.getDestination(currentPoint);
+      this._renderPoint(currentPoint, currentOffers, currentDestination);
     }
+  }
+  
+  
+  _renderPoint(point, offers, destination) {
+    const pointComponent = new PointView(point, offers, destination);
+    const pointEditComponent = new EditPointView(point, offers, destination);
+
+    const replacePointToForm = () => {
+      this._component.element.replaceChild(pointEditComponent.element, pointComponent.element);
+    };
+
+    const replaceFormToPoint = () => {
+      this._component.element.replaceChild(pointComponent.element, pointEditComponent.element);
+    };
+
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    const onSaveButtonClick = (evt) => {
+      evt.preventDefault();
+      replaceFormToPoint();
+      pointEditComponent.element.removeEventListener('submit', onSaveButtonClick);
+    };
+
+    const onRollupButtonClick = () => {
+      replaceFormToPoint();
+      pointEditComponent.element.removeEventListener('click', onRollupButtonClick);
+    };
+
+    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replacePointToForm();
+
+      document.addEventListener('keydown', onEscKeyDown);
+
+      pointEditComponent.element.querySelector('form').addEventListener('submit', onSaveButtonClick);
+
+      pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', onRollupButtonClick);
+    });
+
+    return render(pointComponent, this._component.element, "beforebegin");
   }
 }
 
