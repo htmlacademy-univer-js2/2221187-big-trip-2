@@ -1,10 +1,9 @@
 import { createElement } from '../render';
 import { humanizeDate, humanizeTime, getDifference } from '../utils';
 import OffersByType from '../fish-data/offer';
-import Destinations from '../fish-data/destination';
 
 
-const createPointTemplate = (point) => {
+const createPointTemplate = (point, currentOffers, currentDestination) => {
   const {
     type,
     basePrice,
@@ -47,31 +46,21 @@ const createPointTemplate = (point) => {
 
     return `${differenceMinute}M`;
   };
-
-  const getDestinationDate = () => Destinations.find((x) => x.id === destination);
-
-  const getTemplateOffer = (id) => {
-    const currentOffers = OffersByType.find((x) => x.type === type);
-    const currentOffer = currentOffers['offers'].find((x) => x.id === id);
-    return(
-      `<li class="event__offer">
-            <span class="event__offer-title">${currentOffer['title']}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${currentOffer['price']}</span>
-          </li>`);
+  
+  const getTemplateOffer = (offer) => {
+    if (offers.find((x) => x === offer['id'])) {
+      return(
+        `<li class="event__offer">
+              <span class="event__offer-title">${offer['title']}</span>
+              &plus;&euro;&nbsp;
+              <span class="event__offer-price">${offer['price']}</span>
+            </li>`);
+    }
   };
 
   const createOffersElement = () => {
-    let container = '';
-
-    if (offers.length === 0) {
-      return '';
-    } else {
-      for (let i = 1; i <= offers.length; i++) {
-        container += getTemplateOffer(i);
-      }
-    }
-    return container;
+    const offersView = currentOffers.map(getTemplateOffer);
+    return offersView.join(' ');
   };
 
   return (
@@ -81,7 +70,7 @@ const createPointTemplate = (point) => {
         <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event ${type} icon">
         </div>
-        <h3 class="event__title">${type} ${getDestinationDate().name}</h3>
+        <h3 class="event__title">${type} ${currentDestination.name}</h3>
         <div class="event__schedule">
         <p class="event__time">
             <time class="event__start-time" datetime="2019-03-18T10:30">${timeFrom}</time>
@@ -109,23 +98,25 @@ const createPointTemplate = (point) => {
   );};
 
 class PointView {
-  constructor(point) {
+  constructor(point, offers, destination) {
     this.point = point;
+	this.offers = offers;
+	this.destination = destination;
   }
 
-  getTemplate() {
-    return createPointTemplate(this.point);
+  get _template() {
+    return createPointTemplate(this.point, this.offers, this.destination);
   }
 
-  getElement() {
-    if(!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if(!this._element) {
+      this._element = createElement(this._template);
     }
-    return this.element;
+    return this._element;
   }
 
   removeElement() {
-    this.element = null;
+    this._element = null;
   }
 }
 
