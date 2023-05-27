@@ -32,6 +32,7 @@ class PointsModel {
       return this._destinations.find((x) => x.id === point['destination']);
     }
     return this._destinations;
+  }
 }
 
 export default PointsModel;
