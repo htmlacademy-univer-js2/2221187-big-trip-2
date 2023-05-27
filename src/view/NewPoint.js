@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import AbstractView from "../framework/view/abstract-view";
 import { humanizeDate, humanizeTime } from '../utils';
 import OffersByType from '../fish-data/offer';
 import Destinations from '../fish-data/destination';
@@ -185,26 +185,15 @@ const createNewPointTemplate = (allOffers, allDestinations, point = {}) => {
   );
 };
 
-class NewPointView {
+class NewPointView extends AbstractView {
   constructor(offers, destination, point) {
     this._point = point;
     this._offers = offers;
     this._destination = destination;
   }
 
-  get _template() {
+  get template() {
     return createNewPointTemplate(this._offers, this._destination, this._point);
-  }
-
-  get element() {
-    if(!this._element) {
-      this._element = createElement(this._template);
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

@@ -1,4 +1,4 @@
-import createElement from "../createElement";
+import AbstractView from "../framework/view/abstract-view";
 
 const filterTemplate = () => {
   ` <form class="trip-filters" action="#" method="get">
@@ -19,20 +19,9 @@ const filterTemplate = () => {
   `;
 };
 
-class FilterView {
-  getTemplate() {
-    return filterTemplate;
-  }
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+class FilterView extends AbstractView {
+  get template() {
+    return filterTemplate();
   }
 }
 

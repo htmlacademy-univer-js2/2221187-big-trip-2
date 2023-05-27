@@ -1,5 +1,5 @@
 import TripView from "./presenter/trip";
-import render from "./render";
+import { render } from "./framework/render";
 import FilterView from "./view/Filters";
 
 const filterContainer = document.querySelector(".trip-controls__filters");
