@@ -14,20 +14,20 @@ class TripView {
     this._component = new DotsView();
     this._container = container;
     this._pointsModel = pointsModel;
-    this._listPoints = this._pointsModel.getPoints();
+    this._listPoints = this._pointsModel.points;
   }
 
   init() {
     render(new SortView(), this._container, "beforebegin");
     render(this._component, this._container, "beforebegin");
-    render(new FormChangeView(), this._component.getElement(), "beforebegin");
+    render(new FormChangeView(), this._component.element, "beforebegin");
 
     for (let i = 0; i < dotsCount; i++) {
-      render(new FormCreateView(), this._component.getElement(), "beforebegin");
+      render(new FormCreateView(), this._component.element, "beforebegin");
     }
 	
     render(new NewPointView(this._pointsModel.getOffers(),
-      this._pointsModel.getDestination()), this._component.getElement(), "beforebegin");
+      this._pointsModel.getDestination()), this._component.element, "beforebegin");
 	
 	for (let i = 0; i < this._listPoints.length; i++) {
       const currentPoint = this._listPoints[i];
