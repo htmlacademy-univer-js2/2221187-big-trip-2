@@ -6,6 +6,7 @@ import SortView from '../view/Sort';
 import DotsView from "../view/DotsList";
 import FormChangeView from "../view/FormChange";
 import FormCreateView from "../view/FormCreate";
+import FirstMessageView from '../view/FirstMessage';
 
 let dotsCount = 3;
 
@@ -18,23 +19,22 @@ class TripView {
   }
 
   init() {
-    render(new SortView(), this._container, "beforebegin");
-    render(this._component, this._container, "beforebegin");
-    render(new FormChangeView(), this._component.element, "beforebegin");
+    if (this._listPoints.length === 0) {
+      render(new FirstMessageView(), this._container, "beforebegin");
+    }
+    else {
+      render(new SortView(), this._container, "beforebegin");
+      render(this._component, this._container, "beforebegin");
 
-    for (let i = 0; i < dotsCount; i++) {
-      render(new FormCreateView(), this._component.element, "beforebegin");
-    }
-	
-    render(new NewPointView(this._pointsModel.getOffers(),
-      this._pointsModel.getDestination()), this._component.element, "beforebegin");
-	
-	for (let i = 0; i < this._listPoints.length; i++) {
-      const currentPoint = this._listPoints[i];
-      const currentOffers = this._pointsModel.getOffers(currentPoint);
-      const currentDestination = this._pointsModel.getDestination(currentPoint);
-      this._renderPoint(currentPoint, currentOffers, currentDestination);
-    }
+      render(new NewPointView(this._pointsModel.getOffers(),
+        this._pointsModel.getDestination()), this._component.element);
+
+      for (let i = 0; i < this._listPoints.length; i++) {
+        const currentPoint = this._listPoints[i];
+        const currentOffers = this._pointsModel.getOffers(currentPoint);
+        const currentDestination = this._pointsModel.getDestination(currentPoint);
+        this._renderPoint(currentPoint, currentOffers, currentDestination);
+      }
   }
   
   
