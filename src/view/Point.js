@@ -99,9 +99,10 @@ const createPointTemplate = (point, currentOffers, currentDestination) => {
 
 class PointView extends AbstractView {
   constructor(point, offers, destination) {
+    super();
     this._point = point;
-	this._offers = offers;
-	this._destination = destination;
+	  this._offers = offers;
+	  this._destination = destination;
   }
 
   get template() {

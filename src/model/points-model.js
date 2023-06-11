@@ -1,23 +1,17 @@
 import generatePoint from '../fish-data/point';
 import OffersByType from '../fish-data/offer';
 import destinations from '../fish-data/destination';
+import { COUNT_POINT } from '../const';
 
 class PointsModel {
   constructor() {
     this._points = Array.from({length: COUNT_POINT}, generatePoint);
-    this._offers = offersByType;
-	this.destinations = destinations;
+    this._offers = OffersByType;
+	  this._destinations = destinations;
   }
 
   get points() {
     return this._points;
-  }
-  
-  getDestination(point) {
-    if (point){
-      return destinations.find((x) => x.id === point['destination']);
-    }
-    return this.destinations;
   }
   
   getOffers(point) {
