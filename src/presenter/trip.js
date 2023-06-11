@@ -15,7 +15,7 @@ class TripPresenter {
     this._listPoints = [];
   }
   init() {
-    this._listPoints = this._pointsModel.points;
+    this._listPoints = this._pointsModel._points;
     this._renderTrip();
   }
   _renderTrip() {
@@ -23,11 +23,11 @@ class TripPresenter {
       render(new FirstMessageView(), this._container);
     }
     else {
-      const sorting = generateSorting(this._pointsModel.points)
+      const sorting = generateSorting(this._pointsModel._points)
       render(new SortView(sorting), this._container);
       render(this._tripListComponent, this._container);
       render(new NewPointView(this._pointsModel.getOffers(),
-        this._pointsModel.getDestination()), this._tripListComponent.element);
+        this._pointsModel.getDestination()), this._tripListComponent.element, "beforebegin");
       for (let i = 0; i < this._listPoints.length; i++) {
         const currentPoint = this._listPoints[i];
         const curretnOffers = this._pointsModel.getOffers(currentPoint);

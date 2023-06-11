@@ -21,8 +21,8 @@ const sortingTemplate = (sortingItems) => {
 
 class SortView extends AbstractView {
   constructor(sorting){
-    super()
-    this._sorting = sorting
+    super();
+    this._sorting = sorting;
   }
   
   get template() {
