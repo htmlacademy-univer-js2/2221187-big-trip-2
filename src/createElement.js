@@ -4,4 +4,5 @@ const createElement = (template) => {
 
   return newElement.firstElementChild;
 };
+
 export default createElement;

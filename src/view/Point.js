@@ -1,20 +1,17 @@
 import AbstractView from "../framework/view/abstract-view";
-import { humanizeDate, humanizeTime, getDifference } from '../utils';
-import OffersByType from '../fish-data/offer';
+import { humanize_date, humanize_time, get_date_diff } from '../utils';
 
-
-const createPointTemplate = (point, currentOffers, currentDestination) => {
+const Point_template = (point, currentOffers, currentDestination) => {
   const {
     type,
     basePrice,
-    destination,
     dateFrom,
     dateTo,
     isFavorite,
     offers} = point;
 
   const date = dateFrom !== null
-    ? humanizeDate(dateFrom, 'D MMMM')
+    ? humanize_date(dateFrom, 'D MMMM')
     : 'June 9';
 
   const favoriteClassName = isFavorite
@@ -22,32 +19,30 @@ const createPointTemplate = (point, currentOffers, currentDestination) => {
     : '';
 
   const timeFrom = dateFrom !== null
-    ? humanizeTime(dateFrom)
+    ? humanize_time(dateFrom)
     : '10:00';
 
   const timeTo = dateTo !== null
-    ? humanizeTime(dateTo)
+    ? humanize_time(dateTo)
     : '11:00';
 
-  const formattingDate = (diffDate) => diffDate < 10? `0${diffDate}`: `${diffDate}`;
+  const date_formatting = (diffDate) => diffDate < 10? `0${diffDate}`: `${diffDate}`;
 
-  const calculateTimeSpent = () => {
-    const differenceDays = formattingDate(getDifference(dateFrom, dateTo, 'day'));
-    const differenceHours = formattingDate(getDifference(dateFrom, dateTo, 'hour') - differenceDays * 24);
-    const differenceMinute = formattingDate(getDifference(dateFrom, dateTo, 'minute') - differenceDays * 24 * 60 - differenceHours * 60 + 1);
+  const calculate_spent_time = () => {
+    const days_diff = date_formatting(get_date_diff(dateFrom, dateTo, 'day'));
+    const hours_diff = date_formatting(get_date_diff(dateFrom, dateTo, 'hour') - days_diff * 24);
+    const minutes_diff = date_formatting(get_date_diff(dateFrom, dateTo, 'minute') - days_diff * 24 * 60 - hours_diff * 60 + 1);
 
-    if (differenceDays !== '00') {
-      return `${differenceDays}D ${differenceHours}H ${differenceMinute}M`;
-    }
+    if (days_diff !== '00')
+      return `${days_diff}D ${hours_diff}H ${minutes_diff}M`;
 
-    if (differenceHours !== '00') {
-      return `${differenceHours}H ${differenceMinute}M`;
-    }
+    if (hours_diff !== '00')
+      return `${hours_diff}H ${minutes_diff}M`;
 
-    return `${differenceMinute}M`;
+    return `${minutes_diff}M`;
   };
   
-  const getTemplateOffer = (offer) => {
+  const get_offer_template = (offer) => {
     if (offers.find((x) => x === offer['id'])) {
       return(
         `<li class="event__offer">
@@ -58,10 +53,7 @@ const createPointTemplate = (point, currentOffers, currentDestination) => {
     }
   };
 
-  const createOffersElement = () => {
-    const offersView = currentOffers.map(getTemplateOffer);
-    return offersView.join(' ');
-  };
+  const create_offers_element = () => currentOffers.map(get_offer_template).join(' ');
 
   return (
     `<li class="trip-events__item">
@@ -77,13 +69,13 @@ const createPointTemplate = (point, currentOffers, currentDestination) => {
             &mdash;
             <time class="event__end-time" datetime="2019-03-18T11:00">${timeTo}</time>
         </p>
-        <p class="event__duration">${calculateTimeSpent()}</p>
+        <p class="event__duration">${calculate_spent_time()}</p>
         </div>
         <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
-        <ul class="event__selected-offers">${createOffersElement()}</ul>
+        <ul class="event__selected-offers">${create_offers_element()}</ul>
         <button class="event__favorite-btn ${favoriteClassName}" type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -106,10 +98,10 @@ class PointView extends AbstractView {
   }
 
   get template() {
-    return createPointTemplate(this._point, this._offers, this._destination);
+    return Point_template(this._point, this._offers, this._destination);
   }
   
-  setEditClickHandler = (callback) => {
+  setEditClickHandler(callback) {
     this._callback.click = callback
     this.element.addEventListener('click', this._editClickHandler);
   }

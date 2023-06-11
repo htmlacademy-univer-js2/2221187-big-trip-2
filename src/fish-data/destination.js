@@ -1,35 +1,39 @@
-import { getRandomInteger } from '../utils';
+import { get_random_int } from '../utils';
 import { CITIES, DESCRIPTIONS } from '../const';
 
 
-const generateDescription = () => {
-  const randomLength = getRandomInteger(0, DESCRIPTIONS.length - 1);
-  const randomDescription = [];
+const generate_description = () => {
+  const random_length = get_random_int(0, DESCRIPTIONS.length - 1);
+  const random_description = [];
 
-  for (let i = 0; i < randomLength - 1; i++) {
-    randomDescription[i] = DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)];
+  for (let i = 0; i < random_length - 1; i++) {
+    random_description[i] = DESCRIPTIONS[get_random_int(0, DESCRIPTIONS.length - 1)];
   }
 
-  return randomDescription;
+  return random_description;
 };
 
-const generateCity = () => CITIES[getRandomInteger(0, CITIES.length - 1)];
+const generate_city = () => CITIES[get_random_int(0, CITIES.length - 1)];
 
-const generateSrc = () => `http://picsum.photos/300/200?r=${getRandomInteger(1, 20)}`;
+const generate_src = () => `http://picsum.photos/300/200?r=${get_random_int(1, 20)}`;
 
-const generatePhoto = () => ({
-  'src': generateSrc(),
-  'description': generateDescription()
+const generate_photo = () => ({
+  'src': generate_src(),
+  'description': generate_description()
 });
 
-const generateDestination = (id) => ({
+const generate_destination = (id) => ({
   'id': id,
-  'description': generateDescription(),
-  'name': generateCity(),
-  'pictures': Array.from({length: getRandomInteger(1,6)}, generatePhoto)
+  'description': generate_description(),
+  'name': generate_city(),
+  'pictures': Array.from({length: get_random_int(1,6)}, generate_photo)
 });
 
-const Destinations = [generateDestination(1), generateDestination(2),
-  generateDestination(3), generateDestination(4)];
+const Destinations = [
+  generate_destination(1),
+  generate_destination(2),
+  generate_destination(3),
+  generate_destination(4)
+];
 
 export default Destinations;

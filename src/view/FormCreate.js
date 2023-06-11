@@ -1,6 +1,6 @@
 import createElement from '../createElement';
 
-const formCreateTemplate = () =>
+const FormCreate_template = () =>
   `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
         <header class="event__header">
@@ -145,13 +145,13 @@ const formCreateTemplate = () =>
   `;
 
 class FormCreateView {
-  getTemplate() {
-    return formCreateTemplate();
+  get template() {
+    return FormCreate_template();
   }
 
   get element() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate());
+      this._element = createElement(this.template);
     }
     return this._element;
   }

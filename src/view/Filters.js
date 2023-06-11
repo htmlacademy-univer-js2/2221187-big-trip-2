@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 
-const createFilterItemTemplate = (filter, isChecked) => {
+const filter_item_template = (filter, isChecked) => {
   const {name} = filter;
   return (
     `<div class="trip-filters__filter">
@@ -9,8 +9,8 @@ const createFilterItemTemplate = (filter, isChecked) => {
     </div>`);
 };
 
-const filterTemplate = (filterItems) => {
-  const filterItemsTemplate = filterItems.map((filter, index) => createFilterItemTemplate(filter, index === 0)).join(' ');
+const filter_template = (filterItems) => {
+  const filterItemsTemplate = filterItems.map((filter, index) => filter_item_template(filter, index === 0)).join(' ');
   return `<form class="trip-filters" action="#" method="get">
       ${filterItemsTemplate}
       <button class="visually-hidden" type="submit">Accept filter</button>
@@ -24,7 +24,7 @@ class FilterView extends AbstractView {
   }
 
   get template() {
-    return filterTemplate(this._filters);
+    return filter_template(this._filters);
   }
 }
 

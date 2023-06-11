@@ -1,9 +1,7 @@
 import AbstractView from "../framework/view/abstract-view";
-import { humanizeDate, humanizeTime } from '../utils';
-import OffersByType from '../fish-data/offer';
-import Destinations from '../fish-data/destination';
+import { humanize_date, humanize_time } from '../utils';
 
-const createEditPointTemplate = (point, currentOffers, currentDestination) => {
+const EditPoint_template = (point, currentOffers, currentDestination) => {
   const {
     type,
     basePrice,
@@ -13,17 +11,10 @@ const createEditPointTemplate = (point, currentOffers, currentDestination) => {
 	} = point;
 
 
-  const checkTypePoint = (currentType) => {
+  const check_point_type = (current_type) => current_type === type ? 'checked' : '';
 
-    if (currentType === type) {
-      return 'checked';
-    }
-
-    return '';
-  };
-
-  const getTemplateOffer = (offer) => {
-    if (offers.find((x) => x === offer['id'])){
+  const get_offer_template = (offer) => {
+    if (offers.find((x) => x === offer['id'])) {
       return(
         `<div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
@@ -47,20 +38,13 @@ const createEditPointTemplate = (point, currentOffers, currentDestination) => {
   };
 
 
-  const createOffersElement = () => {
-	const offersView = currentOffers.map(getTemplateOffer);
-	return offersView.join(' ');
-  };
+  const create_offers_element = () => currentOffers.map(get_offer_template).join(' ');
 
-  const getTemplatePhoto = (photo) => (
+  const get_photo_template = (photo) => (
     `<img class="event__photo" src="${photo['src']}" alt="Event photo">`
   );
 
-  const createPhotosElement = () => {
-    const photosView = currentDestination['pictures'].map(getTemplatePhoto);
-	
-	return photosView.join(' ');
-  };
+  const create_photos_element = () => currentDestination['pictures'].map(get_photo_template).join(' ');
 
   return(
     `<li class="trip-events__item">
@@ -78,47 +62,47 @@ const createEditPointTemplate = (point, currentOffers, currentDestination) => {
                   <legend class="visually-hidden">Event type</legend>
 
                   <div class="event__type-item">
-                  <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${checkTypePoint('taxi')}>
+                  <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${check_point_type('taxi')}>
                   <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
                   </div>
 
                   <div class="event__type-item">
-                  <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${checkTypePoint('bus')}>
+                  <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${check_point_type('bus')}>
                   <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
                   </div>
 
                   <div class="event__type-item">
-                  <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${checkTypePoint('train')}>
+                  <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${check_point_type('train')}>
                   <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
                   </div>
 
                   <div class="event__type-item">
-                  <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${checkTypePoint('ship')}>
+                  <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${check_point_type('ship')}>
                   <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
                   </div>
 
                   <div class="event__type-item">
-                  <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${checkTypePoint('drive')}>
+                  <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${check_point_type('drive')}>
                   <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
                   </div>
 
                   <div class="event__type-item">
-                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${checkTypePoint('flight')}>
+                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${check_point_type('flight')}>
                   <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
                   </div>
 
                   <div class="event__type-item">
-                  <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${checkTypePoint('check-in')}>
+                  <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${check_point_type('check-in')}>
                   <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
                   </div>
 
                   <div class="event__type-item">
-                  <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${checkTypePoint('sightseeing')}>
+                  <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${check_point_type('sightseeing')}>
                   <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
                   </div>
 
                   <div class="event__type-item">
-                  <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${checkTypePoint('restaurant')}>
+                  <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${check_point_type('restaurant')}>
                   <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
                   </div>
               </fieldset>
@@ -139,10 +123,10 @@ const createEditPointTemplate = (point, currentOffers, currentDestination) => {
 
           <div class="event__field-group  event__field-group--time">
               <label class="visually-hidden" for="event-start-time-1">From</label>
-              <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeDate(dateFrom, 'DD/MM/YY')} ${humanizeTime(dateFrom)}">
+              <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanize_date(dateFrom, 'DD/MM/YY')} ${humanize_time(dateFrom)}">
               &mdash;
               <label class="visually-hidden" for="event-end-time-1">To</label>
-              <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeDate(dateTo, 'DD/MM/YY')} ${humanizeTime(dateTo)}">
+              <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanize_date(dateTo, 'DD/MM/YY')} ${humanize_time(dateTo)}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -162,7 +146,7 @@ const createEditPointTemplate = (point, currentOffers, currentDestination) => {
           <section class="event__details">
           <section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-              ${createOffersElement()}
+              ${create_offers_element()}
           </section>
 
           <section class="event__section  event__section--destination">
@@ -171,7 +155,7 @@ const createEditPointTemplate = (point, currentOffers, currentDestination) => {
 
               <div class="event__photos-container">
               <div class="event__photos-tape">
-                ${createPhotosElement()}
+                ${create_photos_element()}
               </div>
               </div>
           </section>
@@ -183,14 +167,14 @@ const createEditPointTemplate = (point, currentOffers, currentDestination) => {
 
 class EditPointView extends AbstractView {
   constructor(point, offers, destination) {
-	super();
+	  super();
     this._point = point;
-	this._offers = offers;
-	this._destination = destination;
+	  this._offers = offers;
+	  this._destination = destination;
   }
 
   get template() {
-    return createEditPointTemplate(this._point, this._offers, this._destination);
+    return EditPoint_template(this._point, this._offers, this._destination);
   }
   
   setFormSubmitHandler = (callback) => {

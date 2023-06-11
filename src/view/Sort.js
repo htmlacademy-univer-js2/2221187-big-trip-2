@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 
-const createSortingItemTemplate = (sorting, isChecked) => {
+const sorting_item_template = (sorting, isChecked) => {
   const {name, sequence} = sorting;
   return (
     `<div class="trip-sort__item  trip-sort__item--${name}">
@@ -12,8 +12,8 @@ const createSortingItemTemplate = (sorting, isChecked) => {
   );
 };
 
-const sortingTemplate = (sortingItems) => {
-  const sortingItemsTemplate = sortingItems.map((sorting, index) => createSortingItemTemplate(sorting, index === 3)).join(' ');
+const sorting_template = (sorting_items) => {
+  const sortingItemsTemplate = sorting_items.map((sorting, index) => sorting_item_template(sorting, index === 3)).join(' ');
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       ${sortingItemsTemplate}
     </form>`;
@@ -26,7 +26,7 @@ class SortView extends AbstractView {
   }
 
   get template() {
-    return sortingTemplate(this._sorting);
+    return sorting_template(this._sorting);
   }
 }
 

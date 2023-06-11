@@ -1,13 +1,13 @@
-import generatePoint from '../fish-data/point';
+import generate_point from '../fish-data/point';
 import OffersByType from '../fish-data/offer';
-import destinations from '../fish-data/destination';
+import Destinations from '../fish-data/destination';
 import { COUNT_POINT } from '../const';
 
 class PointsModel {
   constructor() {
-    this._points = Array.from({ length: COUNT_POINT }, generatePoint);
+    this._points = Array.from({ length: COUNT_POINT }, generate_point);
     this._offers = OffersByType;
-    this._destinations = destinations;
+    this._destinations = Destinations;
   }
 
   get points() {

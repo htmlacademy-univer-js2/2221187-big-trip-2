@@ -5,69 +5,70 @@ import NewPointView from '../view/NewPoint';
 import SortView from '../view/Sort';
 import TripListView from '../view/TripList';
 import FirstMessageView from '../view/FirstMessage';
-import generateSorting from '../fish-data/sorting';
+import generate_sorting from '../fish-data/sorting';
 
 class TripPresenter {
   constructor(container, pointsModel) {
-    this._tripListComponent = new TripListView();
+    this._trip_list_component = new TripListView();
     this._container = container;
-    this._pointsModel = pointsModel;
-    this._listPoints = [];
+    this._points_model = pointsModel;
+    this._points_list = [];
   }
 
-  init() {
-    this._listPoints = this._pointsModel._points;
+  initialize() {
+    this._points_list = this._points_model._points;
     this._renderTrip();
   }
 
   _renderTrip() {
-    if (this._listPoints.length === 0) {
+    if (this._points_list.length === 0) {
       render(new FirstMessageView(), this._container);
     }
     else {
-      const sorting = generateSorting(this._pointsModel._points);
+      const sorting = generate_sorting(this._points_model._points);
+
       render(new SortView(sorting), this._container);
-      render(this._tripListComponent, this._container);
-      render(new NewPointView(this._pointsModel.getOffers(),
-        this._pointsModel.getDestination()), this._tripListComponent.element, 'beforebegin');
-      for (let i = 0; i < this._listPoints.length; i++) {
-        const currentPoint = this._listPoints[i];
-        const curretnOffers = this._pointsModel.getOffers(currentPoint);
-        const currentDesctination = this._pointsModel.getDestination(currentPoint);
-        this._renderPoint(currentPoint, curretnOffers, currentDesctination);
+      render(this._trip_list_component, this._container);
+      render(new NewPointView(this._points_model.getOffers(), this._points_model.getDestination()),
+        this._trip_list_component.element, 'beforebegin');
+      
+      for (let i = 0; i < this._points_list.length; i++) {
+        const current_point = this._points_list[i];
+        const point_offers = this._points_model.getOffers(current_point);
+        const point_destination = this._points_model.getDestination(current_point);
+        this._renderPoint(current_point, point_offers, point_destination);
       }
     }
   }
 
   _renderPoint(point, offers, destination) {
-    const pointComponent = new PointView(point, offers, destination);
-    const pointEditComponent = new EditPointView(point, offers, destination);
-    const replacePointToForm = () => {
-      replace(pointEditComponent, pointComponent);
-    };
-    const replaceFormToPoint = () => {
-      replace(pointComponent, pointEditComponent);
-    };
+    const point_component = new PointView(point, offers, destination);
+    const point_edit_component = new EditPointView(point, offers, destination);
+
     const onEscKeyDown = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
-        replaceFormToPoint();
+        replace(point_component, point_edit_component);
         document.removeEventListener('keydown', onEscKeyDown);
       }
     };
-    pointComponent.setEditClickHandler(() => {
-      replacePointToForm();
+
+    point_component.setEditClickHandler(() => {
+      replace(point_edit_component, point_component);
       document.addEventListener('keydown', onEscKeyDown);
     });
-    pointEditComponent.setFormSubmitHandler(() => {
-      replaceFormToPoint();
+
+    point_edit_component.setFormSubmitHandler(() => {
+      replace(point_component, point_edit_component);
       document.removeEventListener('keydown', onEscKeyDown);
     });
-    pointEditComponent.setButtonClickHandler(() => {
-      replaceFormToPoint();
+
+    point_edit_component.setButtonClickHandler(() => {
+      replace(point_component, point_edit_component);
       document.removeEventListener('keydown', onEscKeyDown);
     });
-    return render(pointComponent, this._tripListComponent.element);
+
+    render(point_component, this._trip_list_component.element);
   }
 }
 export default TripPresenter;
