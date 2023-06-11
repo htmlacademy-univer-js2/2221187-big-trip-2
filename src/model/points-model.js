@@ -5,9 +5,9 @@ import { COUNT_POINT } from '../const';
 
 class PointsModel {
   constructor() {
-    this._points = Array.from({length: COUNT_POINT}, generatePoint);
+    this._points = Array.from({ length: COUNT_POINT }, generatePoint);
     this._offers = OffersByType;
-	  this._destinations = destinations;
+    this._destinations = destinations;
   }
 
   get points() {
@@ -22,7 +22,7 @@ class PointsModel {
   }
   
   getDestination(point) {
-    if (point){
+    if (point) {
       return this._destinations.find((x) => x.id === point['destination']);
     }
     return this._destinations;
