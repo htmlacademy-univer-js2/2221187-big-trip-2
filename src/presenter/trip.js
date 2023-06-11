@@ -38,7 +38,7 @@ class TripPresenter {
       }
     }
   }
-  
+
   _renderPoint(point, offers, destination) {
     const pointComponent = new PointView(point, offers, destination);
     const pointEditComponent = new EditPointView(point, offers, destination);
@@ -66,7 +66,7 @@ class TripPresenter {
     pointEditComponent.setButtonClickHandler(() => {
       replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
-	  });
+    });
     return render(pointComponent, this._tripListComponent.element);
   }
 }
