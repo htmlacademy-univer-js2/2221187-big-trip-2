@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import AbstractView from "../framework/view/abstract-view";
 import { humanizeDate, humanizeTime, getDifference } from '../utils';
 import OffersByType from '../fish-data/offer';
 
@@ -97,26 +97,25 @@ const createPointTemplate = (point, currentOffers, currentDestination) => {
   </li>`
   );};
 
-class PointView {
+class PointView extends AbstractView {
   constructor(point, offers, destination) {
-    this.point = point;
-	this.offers = offers;
-	this.destination = destination;
+    this._point = point;
+	this._offers = offers;
+	this._destination = destination;
   }
 
-  get _template() {
-    return createPointTemplate(this.point, this.offers, this.destination);
+  get template() {
+    return createPointTemplate(this._point, this._offers, this._destination);
+  }
+  
+  setEditClickHandler = (callback) => {
+    this._callback.click = callback
+    this.element.addEventListener('click', this._editClickHandler);
   }
 
-  get element() {
-    if(!this._element) {
-      this._element = createElement(this._template);
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  _editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
   }
 }
 

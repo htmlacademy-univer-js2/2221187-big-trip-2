@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import AbstractView from "../framework/view/abstract-view";
 import { humanizeDate, humanizeTime } from '../utils';
 import OffersByType from '../fish-data/offer';
 import Destinations from '../fish-data/destination';
@@ -181,8 +181,9 @@ const createEditPointTemplate = (point, currentOffers, currentDestination) => {
   );
 };
 
-class EditPointView {
+class EditPointView extends AbstractView {
   constructor(point, offers, destination) {
+	super();
     this._point = point;
 	this._offers = offers;
 	this._destination = destination;
@@ -191,16 +192,25 @@ class EditPointView {
   get template() {
     return createEditPointTemplate(this._point, this._offers, this._destination);
   }
-
-  get element() {
-    if(!this._element) {
-      this._element = createElement(this.template);
-    }
-    return this._element;
+  
+  setFormSubmitHandler = (callback) => {
+    this._callback.submit = callback
+    this.element.querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 
-  removeElement() {
-    this._element = null;
+  _formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.submit();
+  }
+
+  setButtonClickHandler = (callback) => {
+    this._callback.click = callback
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this._buttonClickHandler);
+  }
+
+  _buttonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
   }
 }
 
