@@ -27,7 +27,7 @@ class TripView {
       render(this._component, this._container, "beforebegin");
 
       render(new NewPointView(this._pointsModel.getOffers(),
-        this._pointsModel.getDestination()), this._component.element);
+        this._pointsModel.getDestination()), this._component.element, "beforebegin");
 
       for (let i = 0; i < this._listPoints.length; i++) {
         const currentPoint = this._listPoints[i];
@@ -35,6 +35,7 @@ class TripView {
         const currentDestination = this._pointsModel.getDestination(currentPoint);
         this._renderPoint(currentPoint, currentOffers, currentDestination);
       }
+    }
   }
   
   
