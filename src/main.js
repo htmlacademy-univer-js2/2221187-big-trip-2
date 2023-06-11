@@ -7,5 +7,5 @@ const tripContainer = document.querySelector(".trip-events");
 const pointsModel = new PointsModel();
 const tripPresenter = new TripView(tripContainer, pointsModel);
 
-render(new FilterView(), filterContainer, "beforebegin");
+render(new FilterView(), filterContainer, "beforeend");
 tripPresenter.init();
