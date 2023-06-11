@@ -1,14 +1,12 @@
-import createElement from "../createElement";
+import createElement from '../createElement';
 
-const dotsTemplate = () => {
-  return `<ul class="trip-events__list">
-    </ul>`;
-};
+const dotsTemplate = () => `<ul class="trip-events__list"></ul>`;
 
 class DotsView {
   getTemplate() {
     return dotsTemplate();
   }
+  
   get element() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());

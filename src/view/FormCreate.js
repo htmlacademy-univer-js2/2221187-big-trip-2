@@ -1,4 +1,4 @@
-import createElement from "../createElement";
+import createElement from '../createElement';
 
 const formCreateTemplate = () =>
   `<li class="trip-events__item">

@@ -1,4 +1,4 @@
-import AbstractView from "../framework/view/abstract-view";
+import AbstractView from '../framework/view/abstract-view';
 
 const createSortingItemTemplate = (sorting, isChecked) => {
   const {name, sequence} = sorting;
@@ -24,7 +24,7 @@ class SortView extends AbstractView {
     super();
     this._sorting = sorting;
   }
-  
+
   get template() {
     return sortingTemplate(this._sorting);
   }
