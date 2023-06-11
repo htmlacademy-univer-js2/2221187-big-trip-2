@@ -25,4 +25,4 @@ class FilterView extends AbstractView {
   }
 }
 
-export default FiltersView;
+export default FilterView;
