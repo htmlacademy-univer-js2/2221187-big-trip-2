@@ -15,7 +15,7 @@ class TripView {
     this._component = new DotsView();
     this._container = container;
     this._pointsModel = pointsModel;
-    this._listPoints = this._pointsModel.getPoints();
+    this._listPoints = this._pointsModel.points;
   }
 
   init() {
