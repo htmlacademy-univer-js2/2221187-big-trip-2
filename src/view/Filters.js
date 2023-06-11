@@ -1,6 +1,6 @@
 import AbstractView from "../framework/view/abstract-view";
 
-const createFilterItemTemplate = () => (filter, isChecked) => {
+const createFilterItemTemplate = (filter, isChecked) => {
   const {name} = filter;
   return (
     `<div class="trip-filters__filter">

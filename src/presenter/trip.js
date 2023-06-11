@@ -27,7 +27,7 @@ class TripPresenter {
       render(new SortView(sorting), this._container);
       render(this._tripListComponent, this._container);
       render(new NewPointView(this._pointsModel.getOffers(),
-      this._pointsModel.getDestination()), this._tripListComponent.element, "beforebegin");
+        this._pointsModel.getDestination()), this._tripListComponent.element, "beforebegin");
       for (let i = 0; i < this._listPoints.length; i++) {
         const currentPoint = this._listPoints[i];
         const curretnOffers = this._pointsModel.getOffers(currentPoint);

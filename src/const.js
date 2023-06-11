@@ -49,13 +49,13 @@ const FILTERS_TYPE = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PAST: 'past'
-}
+};
 
 const FITERS_MESSAGE = {
   EVERYTHING: 'Click New Event to create your first point',
   FUTURE: 'There are no future events now',
   PAST: 'There are no past events now'
-}
+};
 
 const SORTED_TYPE = {
   DAY: 'day',
@@ -63,7 +63,7 @@ const SORTED_TYPE = {
   TIME: 'time',
   PRICE: 'price',
   OFFERS: 'offers'
-}
+};
 
 export {
   CITIES,

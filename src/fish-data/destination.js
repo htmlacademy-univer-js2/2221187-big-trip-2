@@ -30,6 +30,6 @@ const generateDestination = (id) => ({
 });
 
 const Destinations = [generateDestination(1), generateDestination(2),
-	generateDestination(3), generateDestination(4)];
+  generateDestination(3), generateDestination(4)];
 
 export default Destinations;

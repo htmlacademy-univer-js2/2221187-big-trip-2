@@ -1,10 +1,10 @@
-import { sorting } from "../utils";
+import { sorting } from '../utils';
 
 const generateSorting = (points) => Object.entries(sorting).map(
-    ([sortedName, sortedPoints]) => ({
-      name: sortedName,
-      sequence: sortedPoints(points),
-    }),
-  );
+  ([sortedName, sortedPoints]) => ({
+    name: sortedName,
+    sequence: sortedPoints(points),
+  }),
+);
 
 export default generateSorting;
