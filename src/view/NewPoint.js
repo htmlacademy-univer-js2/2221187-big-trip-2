@@ -1,7 +1,5 @@
-import AbstractView from "../framework/view/abstract-view";
+import AbstractView from '../framework/view/abstract-view';
 import { humanizeDate, humanizeTime } from '../utils';
-import OffersByType from '../fish-data/offer';
-import Destinations from '../fish-data/destination';
 
 const createNewPointTemplate = (allOffers, allDestinations, point = {}) => {
   const {
@@ -49,8 +47,7 @@ const createNewPointTemplate = (allOffers, allDestinations, point = {}) => {
   const createOffersElement = () => {
     const currentOffers = allOffers.find((x) => x.type === type);
     const offersView = currentOffers['offers'].map(getTemplateOffer);
-	
-	return offersView.join(' ');
+    return offersView.join(' ');
   };
 
   const getDestinationDate = () => allDestinations.find((x) => x.id === destination);
@@ -62,8 +59,8 @@ const createNewPointTemplate = (allOffers, allDestinations, point = {}) => {
   const createPhotosElement = () => {
     const currentDestination = getDestinationDate();
     const photosView = currentDestination['pictures'].map(getTemplatePhoto);
-	
-	return photosView.join(' ');
+
+    return photosView.join(' ');
   };
 
   return(

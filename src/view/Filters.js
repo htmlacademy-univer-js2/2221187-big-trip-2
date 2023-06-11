@@ -1,4 +1,4 @@
-import AbstractView from "../framework/view/abstract-view";
+import AbstractView from '../framework/view/abstract-view';
 
 const createFilterItemTemplate = (filter, isChecked) => {
   const {name} = filter;
@@ -19,10 +19,10 @@ const filterTemplate = (filterItems) => {
 
 class FilterView extends AbstractView {
   constructor(filters){
-    super()
-    this._filters = filters
+    super();
+    this._filters = filters;
   }
-  
+
   get template() {
     return filterTemplate(this._filters);
   }
