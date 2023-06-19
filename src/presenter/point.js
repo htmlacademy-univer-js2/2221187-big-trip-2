@@ -1,6 +1,8 @@
 import { render, replace, remove } from '../framework/render';
 import PointView from '../view/Point';
 import EditPointView from '../view/EditPoint';
+import { USER_ACTIONS, UPDATE_TYPES } from '../const';
+import { get_date_diff } from '../utils';
 
 const Mode = {
     DEFAULT: 'DEFAULT',
@@ -38,6 +40,8 @@ class PointPresenter {
         this._point_edit_component.setFormSubmitHandler(this._formSubmitHandler);
 
         this._point_edit_component.setButtonClickHandler(this._buttonClickHandler);
+
+        this._point_edit_component.setDeleteClickHandler(this._handleDeleteClick);
 
         if (prev_point_component === null || prev_point_edit_component === null) {
             render(this._point_component, this._trip_list_component);
@@ -80,7 +84,8 @@ class PointPresenter {
     };
     
     _handleFavoriteClick = () => {
-        this._change_data({ ...this._point, isFavorite: !this._point.isFavorite });
+        this._change_data(USER_ACTIONS.UPDATE_POINT, UPDATE_TYPES.MAJOR,
+            { ...this._point, isFavorite: !this._point.isFavorite });
     };
 
     _onEscKeyDown = (evt) => {
@@ -98,8 +103,17 @@ class PointPresenter {
     }
 
     _formSubmitHandler = (point) => {
+        const is_minor_update = 
+            this._point.basePrice !== point.basePrice ||
+            this._point.offers.toString() !== point.offers.toString() ||
+            get_date_diff(this._point.dateTo, this._point.dateFrom, 'minute') !==
+            get_date_diff(point.dateTo, point.dateFrom, 'minute')
+        
         this._replaceFormToPoint();
-        this._change_data(point);
+        this._change_data(
+            USER_ACTIONS.UPDATE_POINT,
+            is_minor_update ? UPDATE_TYPES.MINOR : UPDATE_TYPES.PATCH,
+            point);
         document.removeEventListener('keydown', this._onEscKeyDown);
     }
 
@@ -107,6 +121,14 @@ class PointPresenter {
         this._point_edit_component.reset(this._point);
         this._replaceFormToPoint();
         document.removeEventListener('keydown', this._onEscKeyDown);
+    }
+    
+    _handleDeleteClick = (point) => {
+        this._change_data(
+            USER_ACTIONS.DELETE_POINT,
+            UPDATE_TYPES.MINOR,
+            point
+        );
     }
 }
 

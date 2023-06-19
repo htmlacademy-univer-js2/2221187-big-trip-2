@@ -29,9 +29,13 @@ const sortings_list = {
 
 const get_final_price = (currentOffers, point) => {
   let price = point.basePrice;
+  
+  if (point.offers.length === 0) {
+    return price;
+  }
 
-  point.offers.forEach((id) => {
-    price += currentOffers[id - 1]['price'];
+  point.offers.forEach((id, index) => {
+    price += currentOffers[index]['price'];
   });
 
   return price;
@@ -43,10 +47,8 @@ const sort_by_price = (points_model) => points_model.points.sort((prev, next) =>
   return prevp - nextp;
 });
 
-const update_item = (items, update) => items.map((item) => item.id === update.id ? update : item);
-
 export {
   get_random_int, humanize_date, humanize_time,
   get_date_diff, filters_list, sortings_list,
-  sort_by_price, get_final_price, update_item
+  sort_by_price, get_final_price
 };
