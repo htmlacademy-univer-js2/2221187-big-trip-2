@@ -1,9 +1,24 @@
 const CITIES = [
-  'Tokyo',
-  'Toronto',
-  'Cape Town',
-  'Paris',
-  'Milan'
+  {
+    'id': 0,
+    'name': 'Tokyo'
+  },
+  {
+    'id': 1,
+    'name': 'Toronto'
+  },
+  {
+    'id': 2,
+    'name': 'Cape Town'
+  },
+  {
+    'id': 3,
+    'name': 'Paris'
+  },
+  {
+    'id': 4,
+    'name': 'Milan'
+  },
 ];
 
 const DESCRIPTIONS = [

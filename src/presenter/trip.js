@@ -16,14 +16,14 @@ class TripPresenter {
     this._point_presenter = new Map();
 
     this._sort_component = new SortView();
-    this._current_sort_type = SORTED_TYPE.PRICE;
+    this._current_sort_type = SORTED_TYPE.DAY;
     this._sourced_points_list = [];
   }
 
   initialize() {
-    this._points_list = sortings_list[SORTED_TYPE.PRICE](this._points_model._points);
+    this._points_list = sortings_list[SORTED_TYPE.DAY](this._points_model._points);
     this._renderTrip();
-    this._sourced_points_list = this._points_list;
+    this._sourced_points_list = [...this._points_model.points];
   }
 
   _handlePointChange = (updated_point) => {
@@ -40,7 +40,7 @@ class TripPresenter {
         this._points_list = sortings_list[sort_type](this._points_list);
         break;
       default:
-        this._points_list = sortings_list[SORTED_TYPE.PRICE](this._points_list);
+        this._points_list = [...this._sourced_points_list];
     }
     this._current_sort_type = sort_type;
   }

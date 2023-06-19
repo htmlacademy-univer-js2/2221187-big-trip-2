@@ -4,7 +4,7 @@ import { SORTED_TYPE } from '../const';
 const Sort_template = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     <div class="trip-sort__item  trip-sort__item--day">
-      <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day">
+      <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
       <label class="trip-sort__btn" for="sort-day" data-sort-type="${SORTED_TYPE.DAY}">Day</label>
     </div>
     <div class="trip-sort__item  trip-sort__item--event">
@@ -37,7 +37,10 @@ class SortView extends AbstractView {
   }
 
   #sortTypeChangeHandler = (evt) => {
-    evt.preventDefault();
+    if (!evt.target.dataset.sortType) {
+      return;
+    }
+    
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };
 }
