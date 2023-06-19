@@ -1,4 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
+import { SORTED_TYPE } from '../const';
 
 const Sort_template = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -15,7 +16,7 @@ const Sort_template = () => (
       <label class="trip-sort__btn" for="sort-time" data-sort-type="${SORTED_TYPE.TIME}">Time</label>
     </div>
     <div class="trip-sort__item  trip-sort__item--price">
-      <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price" checked>
+      <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
       <label class="trip-sort__btn" for="sort-price" data-sort-type="${SORTED_TYPE.PRICE}">Price</label>
     </div>
     <div class="trip-sort__item  trip-sort__item--offer">
@@ -36,10 +37,6 @@ class SortView extends AbstractView {
   }
 
   #sortTypeChangeHandler = (evt) => {
-    if (!evt.target.dataset.sortType) {
-      return;
-    } 
-    
     evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };

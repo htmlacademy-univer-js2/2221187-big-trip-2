@@ -21,7 +21,7 @@ class TripPresenter {
   }
 
   initialize() {
-    this._points_list = sort_by_price(this._points_model._points);
+    this._points_list = sortings_list[SORTED_TYPE.PRICE](this._points_model._points);
     this._renderTrip();
     this._sourced_points_list = this._points_list;
   }
@@ -46,7 +46,7 @@ class TripPresenter {
   }
 
   _handleSortTypeChange = (sort_type) => {
-    if (sort_type === this._current_sort_type){
+    if (sort_type === this._current_sort_type) {
       return;
     }
 
@@ -104,9 +104,7 @@ class TripPresenter {
   }
 
   _clearPointList() {
-    for (let point_presenter in this._point_presenter) {
-      this._point_presenter[point_presenter].destroy();
-    }
+    this._point_presenter.forEach((presenter) => presenter.destroy());
     this._point_presenter.clear();
   }
 }
