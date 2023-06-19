@@ -1,8 +1,12 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { humanize_date, humanize_time } from '../utils';
+import { humanize_date, humanize_time, get_final_price } from '../utils';
 import OffersByType from '../fish-data/offer';
 import Destinations from '../fish-data/destination';
 import { CITIES } from '../const';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import dayjs from 'dayjs';
+
 
 const EditPoint_template = (point, currentOffers, currentDestination) => {
   const {
@@ -125,7 +129,7 @@ const EditPoint_template = (point, currentOffers, currentDestination) => {
               <span class="visually-hidden">Price</span>
               &euro;
               </label>
-              <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+              <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${get_final_price(currentOffers, point)}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -161,7 +165,13 @@ class EditPointView extends AbstractStatefulView {
 	  super();
     this._state = EditPointView.parsePointToState(point);
 	  this._offers = offers;
-	  this._destination = destination;
+    this._destination = destination;
+    this._prev_offers = offers;
+    this._prev_destination = destination;
+    this._datepicker = null;
+    this._setInnerHandlers();
+    this._setDatepickerTo();
+    this._setDatepickerFrom();
   }
 
   get template() {
@@ -186,6 +196,13 @@ class EditPointView extends AbstractStatefulView {
   _buttonClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.click();
+  }
+
+  _priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      basePrice: Number(evt.target.value),
+    });
   }
 
   _offersChangeHandler = (evt) => {
@@ -216,6 +233,8 @@ class EditPointView extends AbstractStatefulView {
 
   _restoreHandlers = () => {
     this._setInnerHandlers();
+    this._setDatepickerTo();
+    this._setDatepickerFrom();
     this.setFormSubmitHandler(this._callback.submit);
     this.setButtonClickHandler(this._callback.click);
   };
@@ -224,9 +243,66 @@ class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__type-group').addEventListener('change',  this._typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this._destinationChangeHandler);
     this.element.querySelector('.event__section--offers').addEventListener('change', this._offersChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
   }
 
-  static parsePointToState = (point) => ({...point});
+  reset = (point) => {
+    this._offers = this._prev_offers;
+    this._destination = this._prev_destination;
+    this.updateElement(EditPointView.parsePointToState(point));
+  }
+
+  removeElement = () => {
+    super.removeElement();
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+  };
+
+  _pointDateFromChangeHandler = ([userDate]) => {
+    this.updateElement({ dateFrom: userDate });
+  };
+
+  _pointDateToChangeHandler = ([userDate]) => {
+    this.updateElement({ dateTo: userDate });
+  };
+
+  _setDatepickerFrom = () => {
+    if (this._state.dateFrom) {
+      this._datepicker = flatpickr(
+        this.element.querySelector('#event-start-time-1'),
+        {
+          enableTime: true,
+          dateFormat: 'd/m/y H:i',
+          defaultDate: this._state.dateFrom,
+          minDate: this._state.dateFrom,
+          maxDate: this._state.dateTo,
+          onChange: this._pointDateFromChangeHandler,
+        },
+      );
+    }
+  };
+
+  _setDatepickerTo = () => {
+    if (this._state.dateTo) {
+      this._datepicker = flatpickr(
+        this.element.querySelector('#event-end-time-1'),
+        {
+          enableTime: true,
+          dateFormat: 'd/m/y H:i',
+          defaultDate: this._state.dateTo,
+          minDate: this._state.dateFrom,
+          onChange: this._pointDateToChangeHandler,
+        },
+      );
+    }
+  };
+
+  static parsePointToState = (point) => ({...point,
+    dateTo: dayjs(point.dateTo).toDate(),
+    dateFrom: dayjs(point.dateFrom).toDate()
+  });
 
   static parseStateToPoint = (state) => ({...state})
 }

@@ -1,5 +1,5 @@
 import { render } from '../framework/render';
-import { update_item, sortings_list } from '../utils';
+import { update_item, sortings_list, sort_by_price } from '../utils';
 import { SORTED_TYPE } from '../const';
 import NewPointView from '../view/NewPoint';
 import SortView from '../view/Sort';
@@ -36,8 +36,10 @@ class TripPresenter {
     switch (sort_type) {
       case SORTED_TYPE.DAY:
       case SORTED_TYPE.TIME:
-      case SORTED_TYPE.PRICE:
         this._points_list = sortings_list[sort_type](this._points_list);
+        break;
+      case SORTED_TYPE.PRICE:
+        this._points_list = sort_by_price(this._points_model);
         break;
       default:
         this._points_list = [...this._sourced_points_list];
