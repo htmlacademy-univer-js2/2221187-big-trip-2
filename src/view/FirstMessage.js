@@ -5,6 +5,11 @@ const create_first_message = (message) => (
 );
 
 class FirstMessageView extends AbstractView {
+  constructor(message) {
+    super();
+    this._message = message;
+  }
+
   get template() {
     return create_first_message(this._message);
   }

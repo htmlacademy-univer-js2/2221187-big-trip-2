@@ -6,12 +6,45 @@ import { CITIES } from '../const';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
+import he from 'he';
 
+const BLANK_POINT = {
+  type: 'taxi',
+  basePrice: 99,
+  destination: 1,
+  dateFrom: '2019-07-10T22:55:56.845Z',
+  dateTo: '2019-07-11T11:22:13.375Z',
+  offers: []
+};
+
+const BLANK_OFFERS = [
+  {
+    'id': 0,
+    'title': 'Add a child safety seat',
+    'price': 100
+  },
+  {
+    'id': 1,
+    'title': 'Upgrade to a business class',
+    'price': 100
+  },
+  {
+    'id': 2,
+    'title': 'Rent a polaroid',
+    'price': 100
+  }
+];
+
+const BLANK_DESTINATION = {
+  'id': 1,
+  'description': ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
+  'name': 'Tokyo',
+  'pictures': []
+};
 
 const EditPoint_template = (point, currentOffers, currentDestination) => {
   const {
     type,
-    basePrice,
     dateFrom,
     dateTo,
     offers
@@ -19,6 +52,18 @@ const EditPoint_template = (point, currentOffers, currentDestination) => {
 
 
   const check_point_type = (current_type) => current_type === type ? 'checked' : '';
+
+  const getOption = (option) => {
+    return(
+      `<option value="${option.city}"></option>`
+    )
+  }
+
+  const createOption = () => {
+    const options = CITIES.map(getOption)
+
+    return options.join('')
+  }
 
   const get_offer_template = (offer) => {
     return(
@@ -41,6 +86,12 @@ const EditPoint_template = (point, currentOffers, currentDestination) => {
 
   const create_photos_element = () => currentDestination['pictures'].map(get_photo_template).join(' ');
 
+  const createEventType = (type_id, event_name) =>
+    `<div class="event__type-item">
+    <input id="event-type-${type_id}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type_id}" ${check_point_type(type_id)}>
+    <label class="event__type-label  event__type-label--${type_id}" for="event-type-${type_id}-1">${event_name}</label>
+    </div>`;
+
   return(
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -56,50 +107,16 @@ const EditPoint_template = (point, currentOffers, currentDestination) => {
               <fieldset class="event__type-group">
                   <legend class="visually-hidden">Event type</legend>
 
-                  <div class="event__type-item">
-                  <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${check_point_type('taxi')}>
-                  <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-                  </div>
+                  ${createEventType('taxi', 'Taxi')}
+                  ${createEventType('bus', 'Bus')}
+                  ${createEventType('train', 'Train')}
+                  ${createEventType('ship', 'Ship')}
+                  ${createEventType('drive', 'Drive')}
+                  ${createEventType('flight', 'Flight')}
+                  ${createEventType('check-in', 'Check-in')}
+                  ${createEventType('sightseeing', 'Sightseeing')}
+                  ${createEventType('restaurant', 'Restaurant')}
 
-                  <div class="event__type-item">
-                  <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${check_point_type('bus')}>
-                  <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-                  </div>
-
-                  <div class="event__type-item">
-                  <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${check_point_type('train')}>
-                  <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-                  </div>
-
-                  <div class="event__type-item">
-                  <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${check_point_type('ship')}>
-                  <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-                  </div>
-
-                  <div class="event__type-item">
-                  <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${check_point_type('drive')}>
-                  <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-                  </div>
-
-                  <div class="event__type-item">
-                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${check_point_type('flight')}>
-                  <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-                  </div>
-
-                  <div class="event__type-item">
-                  <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${check_point_type('check-in')}>
-                  <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-                  </div>
-
-                  <div class="event__type-item">
-                  <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${check_point_type('sightseeing')}>
-                  <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-                  </div>
-
-                  <div class="event__type-item">
-                  <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${check_point_type('restaurant')}>
-                  <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-                  </div>
               </fieldset>
               </div>
           </div>
@@ -108,11 +125,9 @@ const EditPoint_template = (point, currentOffers, currentDestination) => {
               <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
               </label>
-              <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination['name']}" list="destination-list-1">
+              <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(currentDestination['name'])}" list="destination-list-1">
               <datalist id="destination-list-1">
-              <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
-              <option value="Chamonix"></option>
+              ${createOption()}
               </datalist>
           </div>
 
@@ -161,7 +176,7 @@ const EditPoint_template = (point, currentOffers, currentDestination) => {
 };
 
 class EditPointView extends AbstractStatefulView {
-  constructor(point, offers, destination) {
+  constructor(point = BLANK_POINT, offers = BLANK_OFFERS, destination = BLANK_DESTINATION) {
 	  super();
     this._state = EditPointView.parsePointToState(point);
 	  this._offers = offers;
@@ -200,6 +215,11 @@ class EditPointView extends AbstractStatefulView {
 
   _priceChangeHandler = (evt) => {
     evt.preventDefault();
+    
+    if (isNaN(Number(evt.target.value))) {
+      return this._state;
+    }
+
     this._setState({
       basePrice: Number(evt.target.value),
     });
@@ -231,12 +251,23 @@ class EditPointView extends AbstractStatefulView {
     this.updateElement({ type: evt.target.value, offers: [] });
   }
 
+  setDeleteClickHandler = (callback) => {
+    this._callback.delete = callback
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this._deleteClickHandler)
+  }
+
+  _deleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.delete(EditPointView.parseStateToPoint(this._state));
+  }
+
   _restoreHandlers = () => {
     this._setInnerHandlers();
     this._setDatepickerTo();
     this._setDatepickerFrom();
     this.setFormSubmitHandler(this._callback.submit);
     this.setButtonClickHandler(this._callback.click);
+    this.setDeleteClickHandler(this._callback.delete);
   };
 
   _setInnerHandlers = () => {
@@ -297,7 +328,7 @@ class EditPointView extends AbstractStatefulView {
         },
       );
     }
-  };
+  }
 
   static parsePointToState = (point) => ({...point,
     dateTo: dayjs(point.dateTo).toDate(),

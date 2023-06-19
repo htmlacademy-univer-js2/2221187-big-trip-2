@@ -1,5 +1,6 @@
 import AbstractView from "../framework/view/abstract-view";
 import { humanize_date, humanize_time, get_date_diff, get_final_price } from '../utils';
+import he from 'he';
 
 const Point_template = (point, currentOffers, currentDestination) => {
   const {
@@ -62,7 +63,7 @@ const Point_template = (point, currentOffers, currentDestination) => {
         <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event ${type} icon">
         </div>
-        <h3 class="event__title">${type} ${currentDestination.name}</h3>
+        <h3 class="event__title">${type} ${he.encode(currentDestination.name)}</h3>
         <div class="event__schedule">
         <p class="event__time">
             <time class="event__start-time" datetime="2019-03-18T10:30">${timeFrom}</time>

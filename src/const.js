@@ -66,10 +66,10 @@ const FILTERS_TYPE = {
   PAST: 'past'
 };
 
-const FITERS_MESSAGE = {
-  EVERYTHING: 'Click New Event to create your first point',
-  FUTURE: 'There are no future events now',
-  PAST: 'There are no past events now'
+const FILTERS_MESSAGE = {
+  everything: 'Click New Event to create your first point',
+  future: 'There are no future events now',
+  past: 'There are no past events now'
 };
 
 const SORTED_TYPE = {
@@ -80,6 +80,18 @@ const SORTED_TYPE = {
   OFFERS: 'offers'
 };
 
+const USER_ACTIONS = {
+  UPDATE_POINT: 'UPDATE_TASK',
+  ADD_POINT: 'ADD_TASK',
+  DELETE_POINT: 'DELETE_TASK',
+}
+
+const UPDATE_TYPES = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+}
+
 export {
   CITIES,
   OFFER_TITLES,
@@ -87,7 +99,9 @@ export {
   TYPES_POINT,
   COUNT_POINT,
   FILTERS_TYPE,
-  FITERS_MESSAGE,
-  SORTED_TYPE
+  FILTERS_MESSAGE,
+  SORTED_TYPE,
+  USER_ACTIONS,
+  UPDATE_TYPES
 };
 
