@@ -1,5 +1,5 @@
 import AbstractView from "../framework/view/abstract-view";
-import { humanize_date, humanize_time, get_date_diff } from '../utils';
+import { humanize_date, humanize_time, get_date_diff, get_final_price } from '../utils';
 
 const Point_template = (point, currentOffers, currentDestination) => {
   const {
@@ -72,7 +72,7 @@ const Point_template = (point, currentOffers, currentDestination) => {
         <p class="event__duration">${calculate_spent_time()}</p>
         </div>
         <p class="event__price">
-        &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
+        &euro;&nbsp;<span class="event__price-value">${get_final_price(currentOffers, point)}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">${create_offers_element()}</ul>
