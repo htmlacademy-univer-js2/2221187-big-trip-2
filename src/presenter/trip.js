@@ -1,11 +1,11 @@
-import { render, replace } from '../framework/render';
-import PointView from '../view/Point';
-import EditPointView from '../view/EditPoint';
+import { render } from '../framework/render';
+import { update_item } from '../utils';
 import NewPointView from '../view/NewPoint';
 import SortView from '../view/Sort';
 import TripListView from '../view/TripList';
 import FirstMessageView from '../view/FirstMessage';
 import generate_sorting from '../fish-data/sorting';
+import PointPresenter from './point';
 
 class TripPresenter {
   constructor(container, pointsModel) {
@@ -13,6 +13,7 @@ class TripPresenter {
     this._container = container;
     this._points_model = pointsModel;
     this._points_list = [];
+    this._point_presenter = new Map();
   }
 
   initialize() {
@@ -20,55 +21,65 @@ class TripPresenter {
     this._renderTrip();
   }
 
-  _renderTrip() {
-    if (this._points_list.length === 0) {
-      render(new FirstMessageView(), this._container);
-    }
-    else {
-      const sorting = generate_sorting(this._points_model._points);
+  _handlePointChange = (updated_point) => {
+    this._points_list = update_item(this._points_list, updated_point);
+    this._point_presenter.get(updated_point.id).init(updated_point);
+  }
 
-      render(new SortView(sorting), this._container);
-      render(this._trip_list_component, this._container);
-      render(new NewPointView(this._points_model.getOffers(), this._points_model.getDestination()),
-        this._trip_list_component.element, 'beforebegin');
-      
-      for (let i = 0; i < this._points_list.length; i++) {
-        const current_point = this._points_list[i];
-        const point_offers = this._points_model.getOffers(current_point);
-        const point_destination = this._points_model.getDestination(current_point);
-        this._renderPoint(current_point, point_offers, point_destination);
-      }
+  _renderFirstMessage() {
+    render(new FirstMessageView(), this._container);
+  }
+
+  _renderSort() {
+    const sorting = generate_sorting(this._points_model._points);
+
+    render(new SortView(sorting), this._container);
+  }
+
+  _renderNewPoint() {
+    render(new NewPointView(this._points_model.getOffers(), this._points_model.getDestination()),
+      this._trip_list_component.element, 'beforebegin');
+  }
+
+  _renderPoints() {
+    for (let point in this._points_list) {
+      this._renderPoint(this._points_list[point]);
     }
   }
 
-  _renderPoint(point, offers, destination) {
-    const point_component = new PointView(point, offers, destination);
-    const point_edit_component = new EditPointView(point, offers, destination);
+  _renderTripList() {
+    render(this._trip_list_component, this._container);
+    this._renderPoints();
+  }
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replace(point_component, point_edit_component);
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
+  _renderTrip() {
+    if (this._points_list.length === 0) {
+      this._renderFirstMessage();
+      return;
+    }
 
-    point_component.setEditClickHandler(() => {
-      replace(point_edit_component, point_component);
-      document.addEventListener('keydown', onEscKeyDown);
-    });
+    this._renderSort();
+    this._renderTripList();
+  }
 
-    point_edit_component.setFormSubmitHandler(() => {
-      replace(point_component, point_edit_component);
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
+  _handleModeChange = () => {
+    for (let presenter in this._point_presenter) {
+      this._point_presenter[presenter].resetView();
+    }
+  }
 
-    point_edit_component.setButtonClickHandler(() => {
-      replace(point_component, point_edit_component);
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
+  _renderPoint(point) {
+    const point_presenter = new PointPresenter(this._trip_list_component.element, this._points_model,
+      this._handlePointChange, this._handleModeChange);
+    point_presenter.init(point);
+    this._point_presenter.set(point.id, point_presenter);
+  }
 
-    render(point_component, this._trip_list_component.element);
+  _clearPointList() {
+    for (let point_presenter in this._point_presenter) {
+      this._point_presenter[point_presenter].destroy();
+    }
+    this._point_presenter.clear();
   }
 }
 export default TripPresenter;

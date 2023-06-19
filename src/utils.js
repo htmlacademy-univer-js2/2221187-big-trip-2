@@ -27,4 +27,6 @@ const sortings_list = {
   [SORTED_TYPE.OFFERS]: (points) => points
 };
 
-export { get_random_int, humanize_date, humanize_time, get_date_diff, filters_list, sortings_list };
+const update_item = (items, update) => items.map((item) => item.id === update.id ? update : item);
+
+export { get_random_int, humanize_date, humanize_time, get_date_diff, filters_list, sortings_list, update_item };
