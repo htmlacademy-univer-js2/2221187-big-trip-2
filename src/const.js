@@ -19,7 +19,7 @@ const DESCRIPTIONS = [
   'In rutrum ac purus sit amet tempus.'
 ];
 
-const TITLES_OFFER = [
+const OFFER_TITLES = [
   'Add a child safety seat',
   'Stay overnight',
   'Add lunch',
@@ -67,7 +67,7 @@ const SORTED_TYPE = {
 
 export {
   CITIES,
-  TITLES_OFFER,
+  OFFER_TITLES,
   DESCRIPTIONS,
   TYPES_POINT,
   COUNT_POINT,

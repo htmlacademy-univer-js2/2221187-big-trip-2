@@ -1,6 +1,6 @@
 import createElement from '../createElement';
 
-const dotTemplate = () =>
+const dot_template = () =>
   `<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">MAR 18</time>
@@ -40,20 +40,20 @@ const dotTemplate = () =>
             </li>`;
 
 class DotView {
-  getTemplate() {
-    return dotTemplate();
+  get template() {
+    return dot_template();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this._element) {
+      this._element = createElement(this.template);
     }
 
-    return this.element;
+    return this._element;
   }
 
   removeElement() {
-    this.element = null;
+    this._element = null;
   }
 }
 

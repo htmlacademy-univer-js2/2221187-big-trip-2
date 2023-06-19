@@ -1,53 +1,25 @@
-import { getRandomInteger } from '../utils';
-import { TITLES_OFFER } from '../const';
+import { get_random_int } from '../utils';
+import { OFFER_TITLES, TYPES_POINT } from '../const';
 
 
-const generateTitleOffer = () => TITLES_OFFER[getRandomInteger(0, TITLES_OFFER.length - 1)];
+const generate_offer_title = () => OFFER_TITLES[get_random_int(0, OFFER_TITLES.length - 1)];
 
-const generateOffer = (id) => ({
+const generate_offer = (id) => ({
   'id': id,
-  'title': generateTitleOffer(),
-  'price': getRandomInteger(1,200)
+  'title': generate_offer_title(),
+  'price': get_random_int(1,200)
 });
 
-const OffersByType = [
-  {
-    'type': 'taxi',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  },
-  {
-    'type': 'bus',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  },
-  {
-    'type': 'train',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  },
-  {
-    'type': 'ship',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  },
-  {
-    'type': 'drive',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  },
-  {
-    'type': 'flight',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  },
-  {
-    'type': 'check-in',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  },
-  {
-    'type': 'sightseeing',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  },
-  {
-    'type': 'restaurant',
-    'offers': [generateOffer(1), generateOffer(2), generateOffer(3)]
-  }
-];
+let offers_by_type = [];
+
+for (let i = 0; i < TYPES_POINT.length; i++) {
+  offers_by_type.push({
+    'type': TYPES_POINT[i],
+    'offers': [generate_offer(1), generate_offer(2), generate_offer(3)]
+  });
+}
+
+const OffersByType = offers_by_type;
 
 
 export default OffersByType;
