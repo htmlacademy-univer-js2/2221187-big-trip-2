@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view';
 import { SORTED_TYPE } from '../const';
 
-const Sort_template = (sort_type) => {
-  const check_sorting = (sorting) => sorting === sort_type ? 'checked' : '';
+const Sort_template = (sortType) => {
+  const check_sorting = (sorting) => sorting === sortType ? 'checked' : '';
 
   const create_tab = (tab_id, sorting_name, sorting) => `
     <div class="trip-sort__item  trip-sort__item--${tab_id}">
@@ -23,13 +23,13 @@ const Sort_template = (sort_type) => {
 };
 
 class SortView extends AbstractView {
-  constructor(sort_type) {
+  constructor(sortType) {
     super();
-    this._sort_type = sort_type;
+    this._sortType = sortType;
   }
 
   get template() {
-    return Sort_template(this._sort_type);
+    return Sort_template(this._sortType);
   }
 
   setSortTypeChangeHandler = (callback) => {

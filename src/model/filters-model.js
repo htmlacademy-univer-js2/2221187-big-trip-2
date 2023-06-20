@@ -11,9 +11,9 @@ class FiltersModel extends Observable {
         return this._filter;
     }
 
-    setFilter = (update_type, filter) => {
+    setFilter = (updateType, filter) => {
         this._filter = filter;
-        this._notify(update_type, filter)
+        this._notify(updateType, filter)
     }
 }
 

@@ -1,6 +1,6 @@
 import generate_point from '../fish-data/point';
 import Observable from '../framework/observable';
-import OffersByType from '../fish-data/offer';
+import offersByType from '../fish-data/offer';
 import Destinations from '../fish-data/destination';
 import { COUNT_POINT } from '../const';
 
@@ -8,7 +8,7 @@ class PointsModel extends Observable {
   constructor() {
     super();
     this._points = Array.from({ length: COUNT_POINT }, generate_point);
-    this._offers = OffersByType;
+    this._offers = offersByType;
     this._destinations = Destinations;
   }
 
@@ -30,34 +30,34 @@ class PointsModel extends Observable {
     return this._destinations;
   }
 
-  updatePoint = (update_type, points) => {
-    const updated_index = this._points.findIndex(point => point.id === points.id);
+  updatePoint = (updateType, points) => {
+    const updatedIndex = this._points.findIndex(point => point.id === points.id);
 
     this._points = [
-      ...this._points.slice(0, updated_index),
+      ...this._points.slice(0, updatedIndex),
       points,
-      ...this._points.slice(updated_index + 1)
+      ...this._points.slice(updatedIndex + 1)
     ];
 
-    this._notify(update_type, points);
+    this._notify(updateType, points);
   }
 
-  addPoint = (update_type, points) => {
+  addPoint = (updateType, points) => {
     this._points = [points, 
       ...this._points];
 
-    this._notify(update_type, points);
+    this._notify(updateType, points);
   }
 
-  deletePoint = (update_type, points) => {
-    const deleted_index = this._points.findIndex((point) => point.id === points.id);
+  deletePoint = (updateType, points) => {
+    const deletedIndex = this._points.findIndex((point) => point.id === points.id);
 
     this._points = [
-      ...this._points.slice(0, deleted_index),
-      ...this._points.slice(deleted_index + 1)
+      ...this._points.slice(0, deletedIndex),
+      ...this._points.slice(deletedIndex + 1)
     ]
 
-    this._notify(update_type, points);
+    this._notify(updateType, points);
   }
 }
 
