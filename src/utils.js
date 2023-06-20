@@ -22,7 +22,7 @@ const sortingsList = {
 
 const getFinalPrice = (currentOffers, point) => {
   let price = point.basePrice;
-  
+
   if (point.offers.length === 0) {
     return price;
   }
