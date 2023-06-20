@@ -1,7 +1,7 @@
 import { render, replace, remove } from '../framework/render';
 import PointView from '../view/point-view';
 import EditPointView from '../view/edit-point-view';
-import { USER_ACTIONS, UPDATE_TYPES } from '../const';
+import { UserActions, UpdateTypes } from '../const';
 import { getDateDiff } from '../utils';
 
 const Mode = {
@@ -71,6 +71,41 @@ class PointPresenter {
             this._replaceFormToPoint();
         }
     }
+    
+    setSaving = () => {
+        if (this._mode === Mode.EDITING) {
+          this._pointEditComponent.updateElement({
+            isDisabled: true,
+            isSaving: true,
+          });
+        }
+    };
+    
+    setDeleting = () => {
+        if (this._mode === Mode.EDITING) {
+          this._pointEditComponent.updateElement({
+            isDisabled: true,
+            isDeleting: true,
+          });
+        }
+    };
+
+    setAborting = () => {
+        if (this._mode === Mode.DEFAULT) {
+            this._pointComponent.shake();
+            return;
+        }
+
+        this._pointEditComponent.shake(this._resetFormState);
+    };
+
+    _resetFormState = () => {
+        this._pointEditComponent.updateElement({
+            isDisabled: false,
+            isSaving: false,
+            isDeleting: false,
+        });
+    };
 
     _replacePointToForm = () => {
         this._handleModeChange()
@@ -84,7 +119,7 @@ class PointPresenter {
     };
     
     _handleFavoriteClick = () => {
-        this._changeData(USER_ACTIONS.UPDATE_POINT, UPDATE_TYPES.MAJOR,
+        this._changeData(UserActions.UPDATE_POINT, UpdateTypes.MAJOR,
             { ...this._point, isFavorite: !this._point.isFavorite });
     };
 
@@ -111,8 +146,8 @@ class PointPresenter {
         
         this._replaceFormToPoint();
         this._changeData(
-            USER_ACTIONS.UPDATE_POINT,
-            checkMinorUpdate ? UPDATE_TYPES.MINOR : UPDATE_TYPES.PATCH,
+            UserActions.UPDATE_POINT,
+            checkMinorUpdate ? UpdateTypes.MINOR : UpdateTypes.PATCH,
             point);
         document.removeEventListener('keydown', this._onEscKeyDown);
     }
@@ -125,8 +160,8 @@ class PointPresenter {
     
     _handleDeleteClick = (point) => {
         this._changeData(
-            USER_ACTIONS.DELETE_POINT,
-            UPDATE_TYPES.MINOR,
+            UserActions.DELETE_POINT,
+            UpdateTypes.MINOR,
             point
         );
     }
