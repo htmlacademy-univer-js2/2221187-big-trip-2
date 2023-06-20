@@ -1,35 +1,35 @@
 import AbstractView from '../framework/view/abstract-view';
 import { SORTED_TYPE } from '../const';
 
-const Sort_template = (sort_type) => {
-  const check_sorting = (sorting) => sorting === sort_type ? 'checked' : '';
+const sortTemplate = (sortType) => {
+  const checkSorting = (sorting) => sorting === sortType ? 'checked' : '';
 
-  const create_tab = (tab_id, sorting_name, sorting) => `
+  const createTabTemplate = (tab_id, sorting_name, sorting) => `
     <div class="trip-sort__item  trip-sort__item--${tab_id}">
       <input id="sort-${tab_id}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-      value="sort-${tab_id}" ${check_sorting(sorting)}>
+      value="sort-${tab_id}" ${checkSorting(sorting)}>
       <label class="trip-sort__btn" for="sort-${tab_id}" data-sort-type="${sorting}">${sorting_name}</label>
     </div>`;
 
   return (
     `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-      ${create_tab('day', 'Day', SORTED_TYPE.DAY)}
-      ${create_tab('event', 'Event', SORTED_TYPE.EVENT)}
-      ${create_tab('time', 'Time', SORTED_TYPE.TIME)}
-      ${create_tab('price', 'Price', SORTED_TYPE.PRICE)}
-      ${create_tab('offer', 'Offers', SORTED_TYPE.OFFERS)}
+      ${createTabTemplate('day', 'Day', SORTED_TYPE.DAY)}
+      ${createTabTemplate('event', 'Event', SORTED_TYPE.EVENT)}
+      ${createTabTemplate('time', 'Time', SORTED_TYPE.TIME)}
+      ${createTabTemplate('price', 'Price', SORTED_TYPE.PRICE)}
+      ${createTabTemplate('offer', 'Offers', SORTED_TYPE.OFFERS)}
     </form>`
   )
 };
 
 class SortView extends AbstractView {
-  constructor(sort_type) {
+  constructor(sortType) {
     super();
-    this._sort_type = sort_type;
+    this._sortType = sortType;
   }
 
   get template() {
-    return Sort_template(this._sort_type);
+    return sortTemplate(this._sortType);
   }
 
   setSortTypeChangeHandler = (callback) => {
