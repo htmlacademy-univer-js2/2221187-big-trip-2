@@ -1,7 +1,7 @@
 import { remove, render, replace } from "../framework/render";
 import FiltersView from "../view/filters-view";
 import { filtersList } from "../utils";
-import { UPDATE_TYPES, FILTERS_TYPE } from "../const";
+import { UpdateTypes, FilterTypes } from "../const";
 
 class FilterPresenter {
     constructor(filterContainer, filtersModel, pointsModel) {
@@ -19,19 +19,19 @@ class FilterPresenter {
 
         return [
             {
-                type: FILTERS_TYPE.EVERYTHING,
+                type: FilterTypes.EVERYTHING,
                 name: 'everything',
-                count: filtersList[FILTERS_TYPE.EVERYTHING](points).length
+                count: filtersList[FilterTypes.EVERYTHING](points).length
             },
             {
-                type: FILTERS_TYPE.FUTURE,
+                type: FilterTypes.FUTURE,
                 name: 'future',
-                count: filtersList[FILTERS_TYPE.FUTURE](points).length
+                count: filtersList[FilterTypes.FUTURE](points).length
             },
             {
-                type: FILTERS_TYPE.PAST,
+                type: FilterTypes.PAST,
                 name: 'past',
-                count: filtersList[FILTERS_TYPE.PAST](points).length
+                count: filtersList[FilterTypes.PAST](points).length
             }
         ];
     }
@@ -61,7 +61,7 @@ class FilterPresenter {
             return;
         }
 
-        this._filtersModel.setFilter(UPDATE_TYPES.MAJOR, filterType);
+        this._filtersModel.setFilter(UpdateTypes.MAJOR, filterType);
     }
 }
 
