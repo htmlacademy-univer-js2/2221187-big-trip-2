@@ -1,4 +1,5 @@
 import createElement from '../createElement';
+import AbstractView from '../framework/view/abstract-view';
 
 const formChangeTemplate = () => {
   const createEventTemplate = (eType, eName) =>
@@ -92,7 +93,7 @@ const formChangeTemplate = () => {
   </li>`;
 }
 
-class FormChangeView {
+class FormChangeView extends AbstractView {
   get template() {
     return formChangeTemplate();
   }
