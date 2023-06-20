@@ -1,4 +1,5 @@
 import createElement from '../createElement';
+import AbstractView from '../framework/view/abstract-view';
 
 const formCreateTemplate = () => {
   const createEventTemplate = (eType, eName) =>
@@ -107,7 +108,7 @@ const formCreateTemplate = () => {
   `;
 }
 
-class FormCreateView {
+class FormCreateView extends AbstractView {
   get template() {
     return formCreateTemplate();
   }

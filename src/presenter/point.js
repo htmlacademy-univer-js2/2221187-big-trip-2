@@ -1,6 +1,6 @@
 import { render, replace, remove } from '../framework/render';
-import PointView from '../view/Point';
-import EditPointView from '../view/edit-point';
+import PointView from '../view/point-view';
+import EditPointView from '../view/edit-point-view';
 import { USER_ACTIONS, UPDATE_TYPES } from '../const';
 import { getDateDiff } from '../utils';
 
@@ -10,12 +10,13 @@ const Mode = {
 };
 
 class PointPresenter {
-    constructor (trip_list, points, changeDataCallback, modeChangeCallback) {
+    constructor (trip_list, points, offers, destinations, cities, changeDataCallback, modeChangeCallback) {
         this._tripListComponent = trip_list;
         this._pointsModel = points;
         this._point = null;
-        this._offers = null;
-        this._destination = null;
+        this._offers = offers;
+        this._destinations = destinations;
+        this._cities = cities;
         this._pointComponent = null;
         this._pointEditComponent = null;
         this._changeData = changeDataCallback;
@@ -29,18 +30,17 @@ class PointPresenter {
 
         this._point = point;
 
-        this._offers = this._pointsModel.getOffers(this._point);
-        this._destination = this._pointsModel.getDestination(this._point);
-        this._pointComponent = new PointView(this._point, this._offers, this._destination);
-        this._pointEditComponent = new EditPointView(this._point, this._offers, this._destination);
+        const currentOffers = this._offers.find((x) => x.type === this._point['type'])['offers']
+        const currentDestination = this._destinations.find((x) => x.id === point['destination']);
+
+        this._pointComponent = new PointView(this._point, currentOffers, currentDestination);
+        this._pointEditComponent = new EditPointView(this._cities, this._offers, this._destinations,
+            this._point, currentOffers, currentDestination);
+        
         this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-
         this._pointComponent.setEditClickHandler(this._editClickHandler);
-
         this._pointEditComponent.setFormSubmitHandler(this._formSubmitHandler);
-
         this._pointEditComponent.setButtonClickHandler(this._buttonClickHandler);
-
         this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
         if (prevPointComponent === null || prevPointEditComponent === null) {

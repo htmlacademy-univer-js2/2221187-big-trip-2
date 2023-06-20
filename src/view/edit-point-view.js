@@ -1,8 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { humanizeDate, humanizeTime, getFinalPrice } from '../utils';
-import offersByType from '../fish-data/offer';
-import Destinations from '../fish-data/destination';
-import { CITIES } from '../const';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
@@ -10,39 +7,35 @@ import he from 'he';
 
 const BLANK_POINT = {
   type: 'taxi',
-  basePrice: 99,
-  destination: 1,
+  basePrice: 100,
+  destination: 19,
   dateFrom: '2019-07-10T22:55:56.845Z',
   dateTo: '2019-07-11T11:22:13.375Z',
   offers: []
 };
 
 const BLANK_OFFERS = [
-  {
-    'id': 0,
-    'title': 'Add a child safety seat',
-    'price': 100
-  },
-  {
-    'id': 1,
-    'title': 'Upgrade to a business class',
-    'price': 100
-  },
-  {
-    'id': 2,
-    'title': 'Rent a polaroid',
-    'price': 100
-  }
+  { id: 1, title: 'Upgrade to a business class', price: 190 },
+  { id: 2, title: 'Choose the radio station', price: 30 },
+  { id: 3, title: 'Choose temperature', price: 170 },
+  { id: 4, title: "Drive quickly, I'm in a hurry", price: 100 },
+  { id: 5, title: 'Drive slowly', price: 110 }
 ];
 
 const BLANK_DESTINATION = {
-  'id': 1,
-  'description': ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
-  'name': 'Tokyo',
-  'pictures': []
+  description: "Vien, with crowded streets, with an embankment of a mighty river as a centre of attraction.",
+  id: 19,
+  name: "Vien",
+  pictures: [
+    { src: 'https://18.ecmascript.pages.academy/static/destinations/15.jpg', description: 'Vien city centre' },
+    { src: 'https://18.ecmascript.pages.academy/static/destinations/16.jpg', description: 'Vien biggest supermarket' },
+    { src: 'https://18.ecmascript.pages.academy/static/destinations/11.jpg', description: 'Vien park' },
+    { src: 'https://18.ecmascript.pages.academy/static/destinations/12.jpg', description: 'Vien street market' },
+    { src: 'https://18.ecmascript.pages.academy/static/destinations/13.jpg', description: 'Vien city centre' }
+  ]
 };
 
-const editPointTemplate = (point, currentOffers, currentDestination) => {
+const editPointTemplate = (point, currentOffers, currentDestination, city) => {
   const {
     type,
     dateFrom,
@@ -55,12 +48,12 @@ const editPointTemplate = (point, currentOffers, currentDestination) => {
 
   const getOption = (option) => {
     return(
-      `<option value="${option.city}"></option>`
+      `<option value="${option.name}"></option>`
     )
   }
 
   const createOption = () => {
-    const options = CITIES.map(getOption)
+    const options = city.map(getOption)
 
     return options.join('')
   }
@@ -176,11 +169,14 @@ const editPointTemplate = (point, currentOffers, currentDestination) => {
 };
 
 class EditPointView extends AbstractStatefulView {
-  constructor(point = BLANK_POINT, offers = BLANK_OFFERS, destination = BLANK_DESTINATION) {
+  constructor(city, allOffers, allDestinations, point = BLANK_POINT, offers = BLANK_OFFERS, destination = BLANK_DESTINATION) {
 	  super();
     this._state = EditPointView.parsePointToState(point);
 	  this._offers = offers;
     this._destination = destination;
+    this._allOffers = allOffers;
+    this._allDestinations = allDestinations;
+    this._city = city;
     this._prevOffers = offers;
     this._prevDestination = destination;
     this._datepicker = null;
@@ -190,7 +186,7 @@ class EditPointView extends AbstractStatefulView {
   }
 
   get template() {
-    return editPointTemplate(this._state, this._offers, this._destination);
+    return editPointTemplate(this._state, this._offers, this._destination, this._city);
   }
   
   setFormSubmitHandler = (callback) => {
@@ -198,83 +194,14 @@ class EditPointView extends AbstractStatefulView {
     this.element.querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 
-  _formSubmitHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.submit(EditPointView.parseStateToPoint(this._state));
-  }
-
   setButtonClickHandler = (callback) => {
     this._callback.click = callback
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this._buttonClickHandler);
   }
 
-  _buttonClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.click();
-  }
-
-  _priceChangeHandler = (evt) => {
-    evt.preventDefault();
-    
-    if (isNaN(Number(evt.target.value))) {
-      return this._state;
-    }
-
-    this._setState({
-      basePrice: Number(evt.target.value),
-    });
-  }
-
-  _offersChangeHandler = (evt) => {
-    const checkedOfferId = Number(evt.target.id.slice(-1));
-    if (this._state.offers.includes(checkedOfferId)) {
-      this._state.offers = this._state.offers.filter((x) => x !== checkedOfferId);
-    }
-    else {
-      this._state.offers.push(checkedOfferId);
-    }
-    this.updateElement({
-      offers: this._state.offers,
-    });
-  };
-
-  _destinationChangeHandler = (evt) => {
-    evt.preventDefault();
-    const currentCity = evt.target.value;
-    const currentId = CITIES.find((x) => x.city === currentCity)['id'];
-    this._destination = Destinations.find((x) => x.id === currentId);
-    this.updateElement({ destination: currentId });
-  }
-
-  _typeChangeHandler = (evt) => {
-    this._offers = offersByType.find((x) => x.type === evt.target.value)['offers'];
-    this.updateElement({ type: evt.target.value, offers: [] });
-  }
-
   setDeleteClickHandler = (callback) => {
     this._callback.delete = callback
     this.element.querySelector('.event__reset-btn').addEventListener('click', this._deleteClickHandler)
-  }
-
-  _deleteClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.delete(EditPointView.parseStateToPoint(this._state));
-  }
-
-  _restoreHandlers = () => {
-    this._setInnerHandlers();
-    this._setDatepickerTo();
-    this._setDatepickerFrom();
-    this.setFormSubmitHandler(this._callback.submit);
-    this.setButtonClickHandler(this._callback.click);
-    this.setDeleteClickHandler(this._callback.delete);
-  };
-
-  _setInnerHandlers = () => {
-    this.element.querySelector('.event__type-group').addEventListener('change',  this._typeChangeHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('change', this._destinationChangeHandler);
-    this.element.querySelector('.event__section--offers').addEventListener('change', this._offersChangeHandler);
-    this.element.querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
   }
 
   reset = (point) => {
@@ -291,6 +218,18 @@ class EditPointView extends AbstractStatefulView {
     }
   };
 
+  static parsePointToState = (point) => ({...point,
+    dateTo: dayjs(point.dateTo).toDate(),
+    dateFrom: dayjs(point.dateFrom).toDate()
+  });
+
+  static parseStateToPoint = (state) => ({ ...state })
+  
+  _formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.submit(EditPointView.parseStateToPoint(this._state));
+  }
+  
   _pointDateFromChangeHandler = ([userDate]) => {
     this.updateElement({ dateFrom: userDate });
   };
@@ -330,12 +269,74 @@ class EditPointView extends AbstractStatefulView {
     }
   }
 
-  static parsePointToState = (point) => ({...point,
-    dateTo: dayjs(point.dateTo).toDate(),
-    dateFrom: dayjs(point.dateFrom).toDate()
-  });
+  _deleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.delete(EditPointView.parseStateToPoint(this._state));
+  }
 
-  static parseStateToPoint = (state) => ({...state})
+  _restoreHandlers = () => {
+    this._setInnerHandlers();
+    this._setDatepickerTo();
+    this._setDatepickerFrom();
+    this.setFormSubmitHandler(this._callback.submit);
+    this.setButtonClickHandler(this._callback.click);
+    this.setDeleteClickHandler(this._callback.delete);
+  };
+
+  _setInnerHandlers = () => {
+    this.element.querySelector('.event__type-group').addEventListener('change',  this._typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this._destinationChangeHandler);
+    this.element.querySelector('.event__section--offers').addEventListener('change', this._offersChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
+  }
+  
+
+  _buttonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  _priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    
+    if (isNaN(Number(evt.target.value))) {
+      return this._state;
+    }
+
+    this._setState({
+      basePrice: Number(evt.target.value),
+    });
+  }
+
+  _offersChangeHandler = (evt) => {
+    const checkedOfferId = Number(evt.target.id.slice(-1));
+    if (this._state.offers.includes(checkedOfferId)) {
+      this._state.offers = this._state.offers.filter((x) => x !== checkedOfferId);
+    }
+    else {
+      this._state.offers.push(checkedOfferId);
+    }
+    this.updateElement({
+      offers: this._state.offers,
+    });
+  };
+
+  _destinationChangeHandler = (evt) => {
+    evt.preventDefault();
+    const currentCity = evt.target.value;
+    const foundCity = this._city.find((x) => x.name === currentCity);
+    if (foundCity) {
+      this._destination = this._allDestinations.find((x) => x.id === currentId);
+      this.updateElement({ destination: currentId });
+    }
+    else
+      throw new Error("City not found");
+  }
+
+  _typeChangeHandler = (evt) => {
+    this._offers = this._allOffers.find((x) => x.type === evt.target.value)['offers'];
+    this.updateElement({ type: evt.target.value, offers: [] });
+  }
 }
 
 export default EditPointView;

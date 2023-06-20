@@ -1,5 +1,5 @@
 import { remove, render, RenderPosition } from "../framework/render";
-import EditPointView from "../view/edit-point";
+import EditPointView from "../view/edit-point-view";
 import { nanoid } from "nanoid";
 import { USER_ACTIONS, UPDATE_TYPES } from "../const";
 
@@ -11,14 +11,14 @@ class NewPointPresenter {
     this._pointEditComponent = null;
   }
 
-  init(callback) {
+  init(callback, offers, destinations, cities) {
     this._destroyCallback = callback;
 
     if (this._pointEditComponent !== null) {
       return;
     }
 
-    this._pointEditComponent = new EditPointView();
+    this._pointEditComponent = new EditPointView(offers, destinations, cities);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
