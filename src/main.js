@@ -28,12 +28,12 @@ const tripPresenter = new TripView(tripContainer, pointsModel, offersModel, dest
 const filterPresenter = new FilterPresenter(filterContainer, filtersModel, pointsModel);
 
 const handleNewPointFormClose = () => {
-    newPointButtonComponent.element.disabled = false;
-  };
+  newPointButtonComponent.element.disabled = false;
+};
 
 const handleNewPointButtonClick = () => {
-    tripPresenter.createPoint(handleNewPointFormClose);
-    newPointButtonComponent.element.disabled = true;
+  tripPresenter.createPoint(handleNewPointFormClose);
+  newPointButtonComponent.element.disabled = true;
 };
 
 tripPresenter.initialize();
