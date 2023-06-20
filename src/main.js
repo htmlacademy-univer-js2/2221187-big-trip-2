@@ -1,14 +1,32 @@
 import TripView from './presenter/trip';
 import { render } from './framework/render';
-import FilterView from './view/Filters';
 import PointsModel from './model/points-model';
-import generate_filter from './fish-data/filter';
+import FiltersModel from './model/filters-model';
+import FilterPresenter from './presenter/filter';
+import NewPointButtonView from './view/new-point-button-view';
 
-const trip_container = document.querySelector('.trip-events');
-const filter_container = document.querySelector('.trip-controls__filters');
-const points_model = new PointsModel();
-const filters = generate_filter(points_model.points);
-const trip_presenter = new TripView(trip_container, points_model);
+const tripContainer = document.querySelector('.trip-events');
+const filterContainer = document.querySelector('.trip-controls__filters');
+const newPointContainer = document.querySelector('.trip-main');
 
-render(new FilterView(filters), filter_container, 'beforeend');
-trip_presenter.initialize();
+const pointsModel = new PointsModel();
+const filtersModel = new FiltersModel();
+const newPointButtonComponent = new NewPointButtonView();
+
+const tripPresenter = new TripView(tripContainer, pointsModel, filtersModel);
+const filterPresenter = new FilterPresenter(filterContainer, filtersModel, pointsModel);
+
+const handleNewPointFormClose = () => {
+    newPointButtonComponent.element.disabled = false;
+  };
+
+const handleNewPointButtonClick = () => {
+    tripPresenter.createPoint(handleNewPointFormClose);
+    newPointButtonComponent.element.disabled = true;
+};
+
+render(newPointButtonComponent, newPointContainer);
+newPointButtonComponent.setClickHandler(handleNewPointButtonClick);
+
+tripPresenter.initialize();
+filterPresenter.initialize();

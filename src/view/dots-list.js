@@ -1,10 +1,10 @@
 import createElement from '../createElement';
 
-const dots_template = () => '<ul class="trip-events__list"></ul>';
+const dotsTemplate = () => '<ul class="trip-events__list"></ul>';
 
 class DotsView {
   get template() {
-    return dots_template();
+    return dotsTemplate();
   }
 
   get element() {
